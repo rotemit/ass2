@@ -13,6 +13,8 @@ package bgu.spl.mics;
  */
 public abstract class Publisher extends RunnableSubPub {
 
+    ninaaaaaaa;
+
     /**
      * @param name the Publisher name (used mainly for debugging purposes -
      *             does not have to be unique)
