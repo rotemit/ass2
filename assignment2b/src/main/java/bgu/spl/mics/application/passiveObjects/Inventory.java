@@ -1,4 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -12,12 +13,20 @@ import java.util.List;
  */
 public class Inventory {
 	private List<String> gadgets;
+	private static Inventory instance = null;
+
+	private Inventory(){
+		gadgets = null;
+	}
+
 	/**
      * Retrieves the single instance of this class.
      */
 	public static Inventory getInstance() {
-		//TODO: Implement this
-		return null;
+		if(instance == null) {
+			instance = new Inventory();
+		}
+		return instance;
 	}
 
 	/**
@@ -28,7 +37,9 @@ public class Inventory {
      * 						of the inventory.
      */
 	public void load (String[] inventory) {
-		//TODO: Implement this
+		for(int i = 0; i< inventory.length; i++){
+			gadgets.add(inventory[i]);
+		}
 	}
 
 	/**
@@ -38,8 +49,22 @@ public class Inventory {
      * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
      */
 	public boolean getItem(String gadget){
-		//TODO: Implement this
-		return true;
+		if (gadgets.contains(gadget)) {
+			gadgets.remove(gadget);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 *
+	 * <p>
+	 * Prints to a file name @filename a serialized object List<String> which is a
+	 * list of all the of the gadgeds.
+	 * This method is called by the main method in order to generate the output.
+	 */
+	public void printToFile(String filename){
+
 	}
 
 }
