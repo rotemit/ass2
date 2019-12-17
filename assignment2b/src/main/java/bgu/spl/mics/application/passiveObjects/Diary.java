@@ -1,6 +1,10 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import com.google.gson.Gson;
+
+import java.util.LinkedList;
 import java.util.List;
+
 
 /**
  * Passive object representing the diary where all reports are stored.
@@ -11,16 +15,31 @@ import java.util.List;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Diary {
+
+	//************************fields
+	private static Diary instance = null;
+	List<Report> reports;
+	private int totalNumberOfReceivedMissions;
+
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static Diary getInstance() {
-		//TODO: Implement this
-		return null;
+		if (instance == null){
+			instance = new Diary();
+		}
+		return instance;
 	}
 
+	//*********************private constructor
+	private Diary(){
+		reports = new LinkedList<>();
+		totalNumberOfReceivedMissions = 0;
+	}
+
+
 	public List<Report> getReports() {
-		return null;
+		return reports;
 	}
 
 	/**
@@ -28,7 +47,7 @@ public class Diary {
 	 * @param reportToAdd - the report to add
 	 */
 	public void addReport(Report reportToAdd){
-		//TODO: Implement this
+		reports.add(reportToAdd);
 	}
 
 	/**
@@ -38,8 +57,14 @@ public class Diary {
 	 * List of all the reports in the diary.
 	 * This method is called by the main method in order to generate the output.
 	 */
+	//should print all the reports and the number of received missions
 	public void printToFile(String filename){
-		//TODO: Implement this
+		Gson gson = new Gson();
+		// need to open a file to write in
+
+		//"file.write(s1)"+same for s2
+		String s1 = gson.toJson(reports);
+		String s2 = gson.toJson(totalNumberOfReceivedMissions);
 	}
 
 	/**
@@ -47,7 +72,11 @@ public class Diary {
 	 * @return the total number of received missions (executed / aborted) be all the M-instances.
 	 */
 	public int getTotal(){
-		//TODO: Implement this
-		return 0;
+		return totalNumberOfReceivedMissions;
 	}
+
+	public void increment(){
+		totalNumberOfReceivedMissions++;
+	}
+
 }
