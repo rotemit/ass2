@@ -1,4 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,13 +14,12 @@ public class Squad {
 	private Map<String, Agent> agents;
 	private static Squad instance = null;
 	private int numOfAgents;
-	boolean available;
 
 	//**********************contructors
 	private Squad(){
-
+		agents = null;
+		numOfAgents = 0;
 	}
-
 
 	//methods for testing
 	public boolean findSpecificAgent(String serialNumber){
@@ -33,8 +33,6 @@ public class Squad {
 	public int getNumOfAgents(){
 		return numOfAgents;
 	}
-
-
 	//end of testing methods
 
 	/**
@@ -53,22 +51,30 @@ public class Squad {
 	 * 						of the squad.
 	 */
 	public void load (Agent[] agents) {
-		// TODO Implement this
+		for (int i =0; i < agents.length; i++){
+			this.agents.put(agents[i].getSerialNumber(), agents[i]);
+		}
 	}
 
 	/**
 	 * Releases agents.
 	 */
 	public void releaseAgents(List<String> serials){
-		// TODO Implement this
+		for (String serial : serials){
+			agents.get(serial).release();
+		}
 	}
 
 	/**
 	 * simulates executing a mission by calling sleep.
 	 * @param time   milliseconds to sleep
 	 */
-	public void sendAgents(List<String> serials, int time){
-		// TODO Implement this
+	public void sendAgents(List<String> serials, int time) throws InterruptedException {
+		Thread.sleep(time);
+		for (String serial : serials){
+			agents.get(serial).release();
+		}
+		//TODO : check sleep method wtf
 	}
 
 	/**
@@ -76,9 +82,18 @@ public class Squad {
 	 * @param serials   the serial numbers of the agents
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
-	public boolean getAgents(List<String> serials){
-		// TODO Implement this
-		return false;
+	public boolean getAgents(List<String> serials) throws InterruptedException {
+		boolean noMissing = true;
+		for (String serial : serials){
+			if (!agents.containsKey(serial)){
+				noMissing =  false;
+			}
+			if (!agents.get(serial).isAvailable()){
+				wait(); //TODO : check how wait works
+			}
+			agents.get(serial).acquire();
+		}
+		return noMissing;
 	}
 
     /**
@@ -87,8 +102,11 @@ public class Squad {
      * @return a list of the names of the agents with the specified serials.
      */
     public List<String> getAgentsNames(List<String> serials){
-        // TODO Implement this
-	    return null;
+        List<String> agentsName = new ArrayList<>();
+        for(String serial : serials){
+        	agentsName.add(agents.get(serial).getName());
+		}
+	    return agentsName;
     }
 
 
