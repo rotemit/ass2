@@ -1,8 +1,13 @@
 package bgu.spl.mics;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 abstract class RunnableSubPub implements Runnable {
+    protected boolean terminated = false;
+    protected ConcurrentHashMap<Class ,Callback> callbackMap;
     private final String name;
-    private final SimplePublisher simplePublisher;
+    protected final SimplePublisher simplePublisher;
+    protected MessageBroker messageBroker;
 
     /**
      * this method is called once when the event loop starts.
@@ -16,6 +21,9 @@ abstract class RunnableSubPub implements Runnable {
     RunnableSubPub(String name) {
         this.name = name;
         simplePublisher = new SimplePublisher();
+        messageBroker = MessageBrokerImpl.getInstance();
+        callbackMap = new ConcurrentHashMap<>();
+        //TODO maybe to be change maybe not
     }
 
     /**
@@ -32,6 +40,7 @@ abstract class RunnableSubPub implements Runnable {
      */
     @Override
     public abstract void run();
+
 
     /**
      * @return the simple publisher

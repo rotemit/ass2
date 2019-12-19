@@ -10,6 +10,10 @@ package bgu.spl.mics;
  * <p>
  */
 public final class SimplePublisher {
+    private MessageBroker messageBroker = MessageBrokerImpl.getInstance();
+
+    //NO NEED TO ADD PUBLIC CONSTRUCTOR (forum)
+
     /**
      * Sends the event {@code e} using the MessageBroker and receive a {@link Future<T>}
      * object that may be resolved to hold a result. This method must be Non-Blocking since
@@ -23,8 +27,7 @@ public final class SimplePublisher {
      * 	       			null in case no Subscriber has subscribed to {@code e.getClass()}.
      */
     public final <T> Future<T> sendEvent(Event<T> e) {
-        //TODO: implement this.
-        return null; //TODO: delete this line :)
+        return messageBroker.sendEvent(e);
     }
 
     /**
@@ -34,6 +37,6 @@ public final class SimplePublisher {
      * @param b The broadcast message to send
      */
     public final void sendBroadcast(Broadcast b) {
-        //TODO: implement this.
+        messageBroker.sendBroadcast(b);
     }
 }

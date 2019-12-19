@@ -1,5 +1,9 @@
 package bgu.spl.mics;
 
+import jdk.nashorn.internal.codegen.CompilerConstants;
+
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * The Subscriber is an abstract class that any subscriber in the system
  * must extend. The abstract Subscriber class is responsible to get and
@@ -16,7 +20,16 @@ package bgu.spl.mics;
  * <p>
  */
 public abstract class Subscriber extends RunnableSubPub {
+    /* herited
+    private final String name;
+    private final SimplePublisher simplePublisher;
+    protected MessageBroker messageBroker;
+     */
     private boolean terminated = false;
+    private ConcurrentHashMap<Class ,Callback> callbackMap;
+
+
+
 
     /**
      * @param name the Subscriber name (used mainly for debugging purposes -
@@ -24,6 +37,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     public Subscriber(String name) {
         super(name);
+        callbackMap = new ConcurrentHashMap<>();
     }
 
     /**
@@ -34,6 +48,7 @@ public abstract class Subscriber extends RunnableSubPub {
      * 2. Store the {@code callback} so that when events of type {@code type}
      * are received it will be called.
      * <p>
+     *     //TODO : check where callback function is implemented
      * For a received message {@code m} of type {@code type = m.getClass()}
      * calling the callback {@code callback} means running the method
      * {@link Callback#call(java.lang.Object)} by calling
@@ -48,7 +63,8 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
-        //TODO: implement this.
+        messageBroker.subscribeEvent(type, this);
+        callbackMap.put(type, callback);
     }
 
     /**
@@ -72,7 +88,8 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-        //TODO: implement this.
+        messageBroker.subscribeBroadcast(type, this);
+        callbackMap.put(type, callback);
     }
 
     /**
@@ -86,12 +103,12 @@ public abstract class Subscriber extends RunnableSubPub {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
-        //TODO: implement this.
+        messageBroker.complete(e, result);
     }
 
     /**
      * Signals the event loop that it must terminate after handling the current
-     * message.
+     * message. // TODO : check
      */
     protected final void terminate() {
         this.terminated = true;
@@ -103,9 +120,16 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     @Override
     public final void run() {
+        messageBroker.register(this) ;
         initialize();
         while (!terminated) {
-            System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
+            try {
+                Message m = messageBroker.awaitMessage(this);
+                callbackMap.get(m.getClass()).call(m);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            messageBroker.unregister(this);
         }
     }
 

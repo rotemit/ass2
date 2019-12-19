@@ -12,8 +12,13 @@ package bgu.spl.mics;
  * <p>
  */
 public abstract class Publisher extends RunnableSubPub {
+    /*
+    private final String name;
+    private final SimplePublisher simplePublisher;
+    protected MessageBroker messageBroker;
+    */
 
-   
+
 
     /**
      * @param name the Publisher name (used mainly for debugging purposes -
