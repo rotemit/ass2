@@ -1,7 +1,18 @@
 package bgu.spl.mics.application.messages;
 
 import bgu.spl.mics.Event;
-import bgu.spl.mics.Message;
+
+import java.util.List;
 
 public class AgentsAvailableEvent implements Event {
+    private List<String> agentsSerialNumbers;
+
+    public AgentsAvailableEvent(List<String> agentsSerialNumbers) {
+        this.agentsSerialNumbers = agentsSerialNumbers;
+    }
+
+    public List<String> getAgentsSerialNumbers() {
+        return agentsSerialNumbers;
+    }
+
 }
