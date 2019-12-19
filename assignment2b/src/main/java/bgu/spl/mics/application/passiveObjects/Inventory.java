@@ -1,6 +1,8 @@
 package bgu.spl.mics.application.passiveObjects;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Inventory {
-	private List<String> gadgets;
+	private HashMap<String, Gadget> gadgets;
 	private static Inventory instance = null;
 
 	private Inventory(){
@@ -38,7 +40,8 @@ public class Inventory {
      */
 	public void load (String[] inventory) {
 		for(int i = 0; i< inventory.length; i++){
-			gadgets.add(inventory[i]);
+			Gadget curr = new Gadget(inventory[i]);
+			gadgets.put(inventory[i], curr);
 		}
 	}
 
@@ -49,12 +52,18 @@ public class Inventory {
      * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
      */
 	public boolean getItem(String gadget){
-		if (gadgets.contains(gadget)) {
-			gadgets.remove(gadget);
-			return true;
+		if ((gadgets.get(gadget))==null || !gadgets.get(gadget).isAvailable()){
+			return false;
 		}
-		return false;
+		gadgets.get(gadget).acquire();
+		return true;
 	}
+//TODO : not sure its necessary
+	public Gadget takeItem(String gadget){
+			return gadgets.get(gadget);
+	}
+
+
 
 	/**
 	 *
@@ -64,6 +73,7 @@ public class Inventory {
 	 * This method is called by the main method in order to generate the output.
 	 */
 	public void printToFile(String filename){
+
 
 	}
 

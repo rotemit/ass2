@@ -1,10 +1,9 @@
 package bgu.spl.mics.application.passiveObjects;
-
 import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
 
 /**
  * Passive object representing the diary where all reports are stored.
@@ -18,7 +17,7 @@ public class Diary {
 
 	//************************fields
 	private static Diary instance = null;
-	List<Report> reports;
+	private HashMap<String ,Report> reports;
 	private int totalNumberOfReceivedMissions;
 
 	/**
@@ -33,13 +32,28 @@ public class Diary {
 
 	//*********************private constructor
 	private Diary(){
-		reports = new LinkedList<>();
+		reports = new HashMap<>();
 		totalNumberOfReceivedMissions = 0;
 	}
 
 
 	public List<Report> getReports() {
-		return reports;
+		List<Report> reportsList = new LinkedList<>();
+		for(Report r : reports.values()){
+			reportsList.add(r);
+		}
+		return reportsList;
+	}
+
+	public List<String> getMissionAgents (String missionName){
+		Report curr = reports.get(missionName);
+		List<String> agentsSerialsNumbers = curr.getAgentsSerialNumbers();
+		return agentsSerialsNumbers;
+	}
+
+
+	public String getMissionGadget(String mission) {
+		return reports.get(mission).getGadgetName();
 	}
 
 	/**
@@ -47,7 +61,7 @@ public class Diary {
 	 * @param reportToAdd - the report to add
 	 */
 	public void addReport(Report reportToAdd){
-		reports.add(reportToAdd);
+		reports.put(reportToAdd.getMissionName(), reportToAdd);
 	}
 
 	/**

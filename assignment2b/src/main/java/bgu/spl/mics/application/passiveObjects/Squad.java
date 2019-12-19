@@ -1,7 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Passive data-object representing a information about an agent in MI6.
@@ -101,7 +99,7 @@ public class Squad {
      * @param serials the serial numbers of the agents
      * @return a list of the names of the agents with the specified serials.
      */
-    public List<String> getAgentsNames(List<String> serials){
+    public List<String> getNames(List<String> serials){
         List<String> agentsName = new ArrayList<>();
         for(String serial : serials){
         	agentsName.add(agents.get(serial).getName());

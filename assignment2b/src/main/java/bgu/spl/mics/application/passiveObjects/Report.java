@@ -20,9 +20,9 @@ public class Report {
 	private List<String> agentsSerialNumbers;
 	private List<String> agentsNames;
 	private String gadgetName;
-	int qTime;
-	int timeIssued;
-	int timeCreated;
+	private int qTime;
+	private int timeIssued;
+	private int timeCreated;
 
 	//*********************constructors
 	public Report(){
@@ -31,8 +31,8 @@ public class Report {
 
 
 	/**
-     * Retrieves the mission name.
-     */
+	 * Retrieves the mission name.
+	 */
 	public String getMissionName() {
 		return missionName;
 	}
@@ -77,14 +77,14 @@ public class Report {
 	 * <p>
 	 * @return The serial numbers of the agents.
 	 */
-	public List<String> getAgentsSerialNumbersNumber() {
+	public List<String> getAgentsSerialNumbers() {
 		return agentsSerialNumbers;
 	}
 
 	/**
 	 * Sets the serial numbers of the agents.
 	 */
-	public void setAgentsSerialNumbersNumber(List<String> agentsSerialNumbersNumber) {
+	public void setAgentsSerialNumbers(List<String> agentsSerialNumbersNumber) {
 		for (int i=0; i<agentsSerialNumbersNumber.size(); i++){
 			agentsSerialNumbers.add(agentsSerialNumbersNumber.get(i));
 		}
