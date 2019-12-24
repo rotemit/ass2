@@ -50,17 +50,17 @@ public class Q extends Subscriber {
 		this.subscribeEvent(GadgetAvailableEvent.class, callback);
 
 
-
-/*
-//TODO not sur its necessary
 		//take a gadget from inventory
-		Callback<TakeGadgetEvent> callback2 = (takeGadgetEvent)-> {
-			Gadget gadget = inventory.takeItem(takeGadgetEvent.getName());
-			complete(takeGadgetEvent, gadget);
+		Callback<TakeGadgetEvent> callback2 = new Callback<TakeGadgetEvent>() {
+			@Override
+			public void call(TakeGadgetEvent takeGadgetEvent) throws InterruptedException {
+				Gadget gadget = inventory.takeItem(takeGadgetEvent.getName());
+				gadget.acquire();
+				complete(takeGadgetEvent, gadget);
+			}
 		};
 		subscribeEvent(TakeGadgetEvent.class, callback2);
 
- */
 		initialized = true;
 	}
 
