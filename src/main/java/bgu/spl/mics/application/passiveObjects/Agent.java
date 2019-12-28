@@ -23,6 +23,7 @@ public class Agent implements Serializable {
 		this.name = name;
 		this.serialNumber = serialNumber;
 		available = true;
+		System.out.println("agent "+name+"is initializing. Availability: "+available);
 	}
 
 	/**
@@ -70,6 +71,7 @@ public class Agent implements Serializable {
 	 * Acquires an agent.
 	 */
 	public void acquire(){
+		System.out.println("acquireeee");
 		available = false;
 	}
 

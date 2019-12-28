@@ -53,7 +53,10 @@ public class Squad implements Serializable {
 	 */
 	public  void load (Agent[] agents) {
 		for (int i =0; i < agents.length; i++){
-			this.agents.put(agents[i].getSerialNumber(), agents[i]);
+			Agent currAgent = agents[i];
+			currAgent.release();
+			String serialNumber = currAgent.getSerialNumber();
+			this.agents.put(serialNumber, currAgent);
 			numOfAgents++;
 		}
 	}

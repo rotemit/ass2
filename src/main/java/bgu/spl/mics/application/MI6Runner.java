@@ -166,6 +166,7 @@ public class MI6Runner {
         Squad squad = Squad.getInstance();
         squad.load(info.getSquad()); //init the squad singleton with agents
 
+
         TimeService timeService = new TimeService(info.getServices().getTime());
 
         //init all the subscribers
@@ -180,6 +181,8 @@ public class MI6Runner {
 
         Thread timeThread = new Thread(timeService);
         timeThread.run();
+
+
         Vector<Thread> vectorOfThreads = new Vector<>(numOfThreads);
 
         for (Thread thread:vectorOfThreads){

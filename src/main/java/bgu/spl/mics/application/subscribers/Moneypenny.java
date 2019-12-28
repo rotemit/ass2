@@ -54,7 +54,10 @@ public class Moneypenny extends Subscriber {
 		Callback<AgentsAvailableEvent> callback = new Callback<AgentsAvailableEvent>(){
 			@Override
 			public void call(AgentsAvailableEvent e) throws InterruptedException {
-				Pair<Result,Integer> available = new Pair<>(squad.checkIfAvailableAgents(e.getAgentsSerialNumbers()), serialNumber);
+				System.out.println("MoneyPenny "+serialNumber+" processing callback for "+e.toString());
+				List<String> agentsSerials = e.getAgentsSerialNumbers();
+				Result result = squad.checkIfAvailableAgents(agentsSerials);
+				Pair<Result,Integer> available = new Pair<>(result, serialNumber);
 				complete(e, available);
 			}
 		};

@@ -76,7 +76,9 @@ public class Intelligence extends Subscriber {
 
 						while (anymoreMissions && currentMission.getTimeIssued() == currentGlobalTime) {  //its the time to send the order for this tick
 							MissionReceivedEvent missionToSend = new MissionReceivedEvent(currentMission);
+							System.out.println("Intelligence "+serialNumber+" sending event");
 							simplePublisher.sendEvent(missionToSend); //TODO make sure its okay that we ignore the returned Future
+							System.out.println("event sent by Intelligence "+serialNumber);
 							currentIndex++;
 							//if Intelligence ran out of missions to send, update fields
 							if (currentIndex == missions.size()) {

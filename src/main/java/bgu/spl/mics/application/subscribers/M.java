@@ -53,6 +53,7 @@ public class M extends Subscriber {
 		Callback<MissionReceivedEvent> callback = new Callback<MissionReceivedEvent>() {
 			@Override
 			public void call(MissionReceivedEvent e) throws InterruptedException {
+				System.out.println("M "+serialNumber+" received event "+e.getMission().getMissionName());
 				Diary.getInstance().increment();
 				//check if agents are available
 				MissionInfo mission = e.getMission();
@@ -60,26 +61,34 @@ public class M extends Subscriber {
 				List<String> agents = mission.getSerialAgentsNumbers();
 				Future<Pair<Result, Integer>> areAvailablesAgents = simplePublisher.sendEvent(new AgentsAvailableEvent(agents));
 				// if agents not available ..
+				System.out.println("M "+serialNumber+" event "+e.getMission().getMissionName()+" PRINT 1");
 				if (areAvailablesAgents.get().getKey() == Result.NOT_AVAILABLE) {
 					//TODO maybe here we need to write something in the report
+					System.out.println("M "+serialNumber+" event "+e.getMission().getMissionName()+" PRINT 2");
 					return;
 				}
+
 				// now check if the gadget is available
 				String gadgetName = mission.getGadget();
 				Future<Result> isAvailableGadget = simplePublisher.sendEvent(new GadgetAvailableEvent(gadgetName));
 				//if gadget not available ..
+				System.out.println("M "+serialNumber+"event "+e.getMission().getMissionName()+" PRINT 3");
 				if (isAvailableGadget.get() == Result.NOT_AVAILABLE) {
+
 					return;
 				}
+				System.out.println("M "+serialNumber+"event "+e.getMission().getMissionName()+" PRINT 4");
 				if (mission.getTimeExpired() < currentTick) {
 					Future<List<String>> releaseAgents = simplePublisher.sendEvent(new ReleaseAgentEvent(agents));
 					return;
 				}
+				System.out.println("M "+serialNumber+"event "+e.getMission().getMissionName()+" PRINT 5");
 				Future<List<String>> takeAgents = simplePublisher.sendEvent(new TakeAgentsEvent(agents));
 				Future<Pair<Gadget, Integer>> takeGadget = simplePublisher.sendEvent(new TakeGadgetEvent(gadgetName));
 				Report report = new Report(mission.getMissionName(), serialNumber, areAvailablesAgents.get().getValue(), mission.getSerialAgentsNumbers(),
 						takeAgents.get(), mission.getGadget(), takeGadget.get().getValue(), mission.getTimeIssued(), currentTick);
 				diary.addReport(report);
+				System.out.println("M "+serialNumber+" finishing callback for event "+e.getMission().getMissionName());
 			}
 		};
 
